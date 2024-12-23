@@ -1,0 +1,61 @@
+esphome:
+  name: esp32cam
+  friendly_name: ESP32Cam
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "" # Empty key to disable encryption, otherwise it will be generated automatically (44 characters)
+
+ota:
+  - platform: esphome
+    password: "" # Empty password to disable OTA updates, otherwise it will be generated automatically (32 characters)
+
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp32Cam Fallback Hotspot"
+    password: "18ENDVzX5whi"
+
+captive_portal:
+
+#Example configuration entry
+esp32_camera:
+  external_clock:
+    pin: GPIO0
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO26
+    scl: GPIO27
+  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  vsync_pin: GPIO25
+  href_pin: GPIO23
+  pixel_clock_pin: GPIO22
+  power_down_pin: GPIO32
+
+  #Image settings
+  name: My ESP32-CAM  # Name of the camera
+
+#Flashlight
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: gpio_4
+
+#GPIO_4 is the flash light pin
+light:
+  - platform: binary
+    output: gpio_4
+    name: flashlight
